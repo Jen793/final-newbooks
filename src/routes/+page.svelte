@@ -22,12 +22,13 @@
 	// Add these THREE derived totals to your <script> block,
 	// below the classify() function.
 
+	// FIXED: Wrapped t.amount in Number() to turn database text strings into clean math figures
 	let totalRevenue = $derived(
-		transactions.filter((t) => classify(t) === 'Revenue').reduce((sum, t) => sum + t.amount, 0)
+		transactions.filter((t) => classify(t) === 'Revenue').reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
 	);
 
 	let totalExpenses = $derived(
-		transactions.filter((t) => classify(t) === 'Expense').reduce((sum, t) => sum + t.amount, 0)
+		transactions.filter((t) => classify(t) === 'Expense').reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
 	);
 
 	let netIncome = $derived(totalRevenue - totalExpenses);
