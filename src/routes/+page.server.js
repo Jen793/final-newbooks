@@ -22,8 +22,8 @@ export async function load() {
 
 	return { transactions: rows };
 }
-// Add this BELOW your load() function in +page.server.js.
 
+// Add this BELOW your load() function in +page.server.js.
 export const actions = {
 	// 'default' runs when a form on the page is submitted with no action= attribute.
 	default: async ({ request }) => {
@@ -35,9 +35,18 @@ export const actions = {
 		const credit = formData.get('credit');
 		const amount = formData.get('amount');
 
+		// EXTRA CREDIT ADDITION: If this form submission is a row deletion request
+		const formAction = formData.get('_action');
+		if (formAction === 'delete') {
+			const id = formData.get('id');
+			if (id) {
+				await sql`DELETE FROM transactions WHERE id = ${id}`;
+			}
+			return { success: true };
+		}
+
 		// 2. TODO — write an INSERT that adds one row to the transactions table.
 		//    Use the five values above. The id column auto-fills.
-
 		await sql`
   INSERT INTO transactions (date, description, debit, credit, amount)
   VALUES (${date}, ${description}, ${debit}, ${credit}, ${amount})

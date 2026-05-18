@@ -19,16 +19,33 @@
 		}
 	}
 
+	// =========================================================
+	// EXTRA CREDIT MECHANICS (Leaves original state untouched)
+	// =========================================================
+	let currentFilter = $state('All'); // Can be 'All', 'Revenue', or 'Expense'
+
+	let filteredTransactions = $derived(
+		transactions.filter((t) => {
+			if (currentFilter === 'All') return true;
+			return classify(t) === currentFilter;
+		})
+	);
+	// =========================================================
+
 	// Add these THREE derived totals to your <script> block,
 	// below the classify() function.
 
 	// FIXED: Wrapped t.amount in Number() to turn database text strings into clean math figures
 	let totalRevenue = $derived(
-		transactions.filter((t) => classify(t) === 'Revenue').reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
+		transactions
+			.filter((t) => classify(t) === 'Revenue')
+			.reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
 	);
 
 	let totalExpenses = $derived(
-		transactions.filter((t) => classify(t) === 'Expense').reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
+		transactions
+			.filter((t) => classify(t) === 'Expense')
+			.reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
 	);
 
 	let netIncome = $derived(totalRevenue - totalExpenses);
@@ -37,8 +54,10 @@
 <div class="mx-auto max-w-5xl space-y-8 p-6">
 	<!-- HEADER -->
 	<header class="border-b border-slate-200 pb-4">
-		<h1 class="text-3xl font-bold text-slate-800">📒 Final New Books</h1>
-		<p class="mt-1 text-sm text-slate-500">Track transactions. See your income statement live.</p>
+		<h1 class="text-3xl font-bold text-slate-800">📒Final New Books</h1>
+		<p class="mt-1 text-sm text-slate-500">
+			Track transactions. See your income statement live.
+		</p>
 	</header>
 
 	<!-- NEW TRANSACTION FORM -->
@@ -47,7 +66,9 @@
 
 		<form method="POST" class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<div>
-				<label for="date" class="mb-1 block text-sm font-medium text-slate-700">Date</label>
+				<label for="date" class="mb-1 block text-sm font-medium text-slate-700">
+					Date
+				</label>
 				<input
 					id="date"
 					name="date"
@@ -71,9 +92,12 @@
 			</div>
 
 			<div class="md:col-span-2">
-				<label for="description" class="mb-1 block text-sm font-medium text-slate-700"
-					>Description</label
+				<label
+					for="description"
+					class="mb-1 block text-sm font-medium text-slate-700"
 				>
+					Description
+				</label>
 				<input
 					id="description"
 					name="description"
@@ -85,9 +109,12 @@
 			</div>
 
 			<div>
-				<label for="debit" class="mb-1 block text-sm font-medium text-slate-700"
-					>Debit Account</label
+				<label
+					for="debit"
+					class="mb-1 block text-sm font-medium text-slate-700"
 				>
+					Debit Account
+				</label>
 				<select
 					id="debit"
 					name="debit"
@@ -105,9 +132,12 @@
 			</div>
 
 			<div>
-				<label for="credit" class="mb-1 block text-sm font-medium text-slate-700"
-					>Credit Account</label
+				<label
+					for="credit"
+					class="mb-1 block text-sm font-medium text-slate-700"
 				>
+					Credit Account
+				</label>
 				<select
 					id="credit"
 					name="credit"
@@ -148,7 +178,9 @@
 				<span>Total Expenses</span>
 				<span>${Number(totalExpenses).toFixed(2)}</span>
 			</div>
-			<div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
+			<div
+				class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold"
+			>
 				<span>Net Income</span>
 				<span class={netIncome >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
 					${Number(netIncome).toFixed(2)}
@@ -161,9 +193,43 @@
 	<section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
 		<h2 class="mb-4 text-xl font-bold text-slate-800">Recent Transactions</h2>
 
+		<div class="mb-4 flex gap-2">
+			<button
+				type="button"
+				onclick={() => (currentFilter = 'All')}
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
+				'All'
+					? 'bg-slate-800 text-white'
+					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
+			>
+				All
+			</button>
+			<button
+				type="button"
+				onclick={() => (currentFilter = 'Revenue')}
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
+				'Revenue'
+					? 'bg-emerald-600 text-white'
+					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
+			>
+				Revenue
+			</button>
+			<button
+				type="button"
+				onclick={() => (currentFilter = 'Expense')}
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
+				'Expense'
+					? 'bg-rose-600 text-white'
+					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
+			>
+				Expenses
+			</button>
+		</div>
+
+		
 		<div class="overflow-x-auto">
 			<table class="w-full text-sm">
-				<thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+				<thead class="bg-slate-100 text-xs uppercase text-slate-600">
 					<tr>
 						<th class="px-3 py-2 text-left">Date</th>
 						<th class="px-3 py-2 text-left">Description</th>
@@ -171,16 +237,19 @@
 						<th class="px-3 py-2 text-left">Credit</th>
 						<th class="px-3 py-2 text-right">Amount</th>
 						<th class="px-3 py-2 text-left">Type</th>
+						<th class="px-3 py-2 text-center">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					{#each transactions as t (t.id)}
+					{#each filteredTransactions as t (t.id)}
 						<tr class="border-t border-slate-200 hover:bg-slate-50">
 							<td class="px-3 py-2">{t.date}</td>
 							<td class="px-3 py-2">{t.description}</td>
 							<td class="px-3 py-2">{t.debit}</td>
 							<td class="px-3 py-2">{t.credit}</td>
-							<td class="px-3 py-2 text-right">${Number(t.amount).toFixed(2)}</td>
+							<td class="px-3 py-2 text-right">
+								${Number(t.amount).toFixed(2)}
+							</td>
 							<td class="px-3 py-2">
 								{#if classify(t) === 'Revenue'}
 									<span class="font-medium text-emerald-700">Revenue</span>
@@ -189,6 +258,18 @@
 								{:else}
 									<span class="text-slate-400">Other</span>
 								{/if}
+							</td>
+							<td class="px-3 py-2 text-center">
+								<form method="POST">
+									<input type="hidden" name="id" value={t.id} />
+									<input type="hidden" name="_action" value="delete" />
+									<button
+										type="submit"
+										class="text-xs font-semibold text-rose-600 hover:text-rose-800 hover:underline"
+									>
+										Delete
+									</button>
+								</form>
 							</td>
 						</tr>
 					{/each}
