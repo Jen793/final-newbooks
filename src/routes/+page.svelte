@@ -35,7 +35,6 @@
 	// Add these THREE derived totals to your <script> block,
 	// below the classify() function.
 
-	// FIXED: Wrapped t.amount in Number() to turn database text strings into clean math figures
 	let totalRevenue = $derived(
 		transactions
 			.filter((t) => classify(t) === 'Revenue')
@@ -55,9 +54,7 @@
 	<!-- HEADER -->
 	<header class="border-b border-slate-200 pb-4">
 		<h1 class="text-3xl font-bold text-slate-800">📒Final New Books</h1>
-		<p class="mt-1 text-sm text-slate-500">
-			Track transactions. See your income statement live.
-		</p>
+		<p class="mt-1 text-sm text-slate-500">Track transactions. See your income statement live.</p>
 	</header>
 
 	<!-- NEW TRANSACTION FORM -->
@@ -66,9 +63,7 @@
 
 		<form method="POST" class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<div>
-				<label for="date" class="mb-1 block text-sm font-medium text-slate-700">
-					Date
-				</label>
+				<label for="date" class="mb-1 block text-sm font-medium text-slate-700"> Date </label>
 				<input
 					id="date"
 					name="date"
@@ -92,10 +87,7 @@
 			</div>
 
 			<div class="md:col-span-2">
-				<label
-					for="description"
-					class="mb-1 block text-sm font-medium text-slate-700"
-				>
+				<label for="description" class="mb-1 block text-sm font-medium text-slate-700">
 					Description
 				</label>
 				<input
@@ -109,10 +101,7 @@
 			</div>
 
 			<div>
-				<label
-					for="debit"
-					class="mb-1 block text-sm font-medium text-slate-700"
-				>
+				<label for="debit" class="mb-1 block text-sm font-medium text-slate-700">
 					Debit Account
 				</label>
 				<select
@@ -132,10 +121,7 @@
 			</div>
 
 			<div>
-				<label
-					for="credit"
-					class="mb-1 block text-sm font-medium text-slate-700"
-				>
+				<label for="credit" class="mb-1 block text-sm font-medium text-slate-700">
 					Credit Account
 				</label>
 				<select
@@ -178,9 +164,7 @@
 				<span>Total Expenses</span>
 				<span>${Number(totalExpenses).toFixed(2)}</span>
 			</div>
-			<div
-				class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold"
-			>
+			<div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
 				<span>Net Income</span>
 				<span class={netIncome >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
 					${Number(netIncome).toFixed(2)}
@@ -192,13 +176,11 @@
 	<!-- TRANSACTIONS LIST -->
 	<section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
 		<h2 class="mb-4 text-xl font-bold text-slate-800">Recent Transactions</h2>
-
 		<div class="mb-4 flex gap-2">
 			<button
 				type="button"
 				onclick={() => (currentFilter = 'All')}
-				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
-				'All'
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter === 'All'
 					? 'bg-slate-800 text-white'
 					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
 			>
@@ -207,8 +189,7 @@
 			<button
 				type="button"
 				onclick={() => (currentFilter = 'Revenue')}
-				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
-				'Revenue'
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter === 'Revenue'
 					? 'bg-emerald-600 text-white'
 					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
 			>
@@ -217,8 +198,7 @@
 			<button
 				type="button"
 				onclick={() => (currentFilter = 'Expense')}
-				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter ===
-				'Expense'
+				class="rounded px-3 py-1 text-sm font-medium transition-colors {currentFilter === 'Expense'
 					? 'bg-rose-600 text-white'
 					: 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"
 			>
@@ -226,10 +206,9 @@
 			</button>
 		</div>
 
-		
 		<div class="overflow-x-auto">
 			<table class="w-full text-sm">
-				<thead class="bg-slate-100 text-xs uppercase text-slate-600">
+				<thead class="bg-slate-100 text-xs text-slate-600 uppercase">
 					<tr>
 						<th class="px-3 py-2 text-left">Date</th>
 						<th class="px-3 py-2 text-left">Description</th>
